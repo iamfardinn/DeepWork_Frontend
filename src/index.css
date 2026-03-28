@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #6366f1; /* Indigo-500 */
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: transparent !important;
+  color: white;
+  -webkit-app-region: drag; /* Makes the frameless window draggable */
+  user-select: none;
+}
+
+/* Ensure anything interactive does not drag the window, otherwise it can't be clicked */
+button, input, textarea, select, a, .clickable {
+  -webkit-app-region: no-drag;
+}
