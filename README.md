@@ -1,16 +1,51 @@
-# React + Vite
+# DeepWork Timer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+DeepWork is a real-time, cross-client collaborative Pomodoro desktop widget designed to synchronize focus sessions across multiple devices. 
 
-Currently, two official plugins are available:
+## System Architecture
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+The application is structured as a full-stack, distributed web-to-desktop application relying on the following core technologies:
 
-## React Compiler
+*   **Frontend User Interface:** Built using React.js and compiled via Vite for high-performance module reloading and minimal bundle sizes. 
+*   **Desktop Environment:** The React application is embedded within an Electron runtime, granting it native operating system capabilities. The Electron `BrowserWindow` is purposefully configured to completely remove standard OS chrome (frameless) while maintaining true background transparency, resulting in a floating widget aesthetic rather than a traditional windowed application.
+*   **Styling Engine:** All interface components and glass-morphism visual effects are driven natively by TailwindCSS v4.
+*   **Real-Time Synchronization:** Network state is handled entirely by Socket.io. The desktop client maintains a persistent, bidirectional WebSocket connection to a centralized Node.js/Express backend service currently hosted on Render. 
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Synchronization Flow
 
-## Expanding the ESLint configuration
+When a user initializes a session:
+1. The client establishes a Socket.io connection to the routing server.
+2. The user inputs a specific Room Code ("xyz-123"). The Express backend subscribes that specific socket ID to a dedicated broadcast room.
+3. Executing a state change (Start, Pause, Reset) forces the frontend to broadcast an event payload containing the timer state to the backend.
+4. The server instantly multiplexes that exact timer payload to all other connected clients currently residing in the same room namespace, ensuring sub-second synchronization natively.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Local Development Setup
+
+To modify or compile the DeepWork desktop client locally, ensure you have Node.js installed, then clone the repository:
+
+```bash
+git clone https://github.com/iamfardinn/DeepWork_Frontend.git
+cd DeepWork_Frontend
+npm install
+```
+
+### Running the Development Environment
+
+To begin development, run the following script. This will concurrently spin up the Vite development server and the Electron shell, linking them together for Hot-Module-Replacement (HMR).
+
+```bash
+npm start
+```
+
+### Packaging the Executable
+
+When you are ready to distribute the final Windows executable, the project relies on `electron-packager` to natively compile the Chromium binaries. The packaging procedure requires parsing exactly the `dependencies` block (excluding `devDependencies` to optimize binary footprint). 
+
+Before packaging, ensure the underlying React codebase has been transpiled into static bundles:
+
+```bash
+npm run build:vite
+npx electron-packager . "DeepWork Timer" --platform=win32 --arch=x64 --out=release-final3 --overwrite
+```
+
+This generates a standalone `.exe` utilizing the integrated taskbar production assets.
