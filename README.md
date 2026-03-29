@@ -7,8 +7,8 @@ DeepWork is a real-time, cross-client collaborative Pomodoro desktop widget desi
 - **Customizable Timers:** Click the timer when paused to customize duration (supports minutes or `MM:SS` format).
 - **Session Tracking:** Automatically tracks completed focus sessions natively within the UI with subtle dot indicators.
 - **Role-Based Room Modes**:
-  - 🤝 **Shared Mode:** Everyone in the room has full control to start, pause, skip, and edit the timer.
-  - 👔 **Boss Mode:** The room creator has exclusive control. All joining members receive a "Spectator" UI with a synchronized read-only timer.
+  -  **Shared Mode:** Everyone in the room has full control to start, pause, skip, and edit the timer.
+     **Boss Mode:** The room creator has exclusive control. All joining members receive a "Spectator" UI with a synchronized read-only timer.
 - **Dynamic Frameless Widget:** Translucent, always-on-top frameless window integrated tightly via Electron IPC, featuring custom Close and Minimize application buttons. 
 
 ## Technology Stack
