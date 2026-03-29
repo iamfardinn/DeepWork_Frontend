@@ -21,10 +21,12 @@
     },
     "files": [
       "dist/**/*",
-      "electron/**/*"
+      "electron/**/*",
+      "build/icon.png"
     ],
     "win": {
-      "target": "nsis"
+      "target": "portable",
+      "icon": "build/icon.png"
     }
   },
   "dependencies": {
